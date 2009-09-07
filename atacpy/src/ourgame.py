@@ -17,6 +17,9 @@ class gameobject:
 	def draw(self, target):
 		target.blit(self.surface, (self.x, self.y))
 
+	def drawFragment(self, target, area):
+		target.blit(self.surface, (self.x, self.y), area)
+
 class bitmapscreen:
 	
 	def __init__(self, imageFile, xyCoord = (0,0), effect = 0): 
@@ -39,7 +42,7 @@ class ourgame:
 	
 	def __init__(self):
 		pygame.init();		
-		self.screenSize = (800,600)
+		self.screenSize = (640,480)
 		self.situacao = [0,0,0,0,0,0]
 		self.screen = pygame.display.set_mode(self.screenSize, FULLSCREEN | HWSURFACE)
 		pygame.mouse.set_visible(False)
@@ -48,11 +51,16 @@ class ourgame:
 	def loadBitmaps(self):
 		self.background = pygame.Surface(self.screenSize)
 		self.sprite = gameobject(dataloader().load("new_nave.png"))
+		self.padraoTiro = gameobject(dataloader().load("random.png"))
 		self.navInimiga = gameobject(dataloader().load("new_nave_inimig.png"))
+		self.posTiroX = 0
+		self.posTiroY= 480
+		self.limTiroY= 0
 		self.navInimiga.baseX = random.random() * 428 + 20 
 		self.sprite.moveTo(100,440)
 		self.navInimiga.moveTo(200,0)
-		self.background.fill((66,99,255))
+		#self.background.fill((66,99,255))
+		self.background.fill((0,0,0))
 	
 	def introScreen():
 		pass
@@ -98,6 +106,16 @@ class ourgame:
 			self.sprite.x -= self.sprite.stepx	
 		elif self.situacao[1] == 1 and self.sprite.x <= 448-self.sprite.stepx:
 			self.sprite.x += self.sprite.stepx	
+			
+		if self.situacao[2] == 1 and self.posTiroY == 480:
+			self.posTiroY -= 20
+			self.posTiroX = self.sprite.x + 14
+			self.padraoTiro.x = self.sprite.x + 14
+			self.limTiroY = self.navInimiga.y - 16
+			if self.limTiroY < 0:
+				self.limTiroY = 0
+			
+	
 		#
 		#if self.situacao[2] == 1 and self.sprite.y >= self.sprite.stepy:
 		#	self.sprite.y -= self.sprite.stepy
@@ -120,6 +138,17 @@ class ourgame:
 		self.screen.blit(self.background, (0,0))
 		self.sprite.draw(self.screen)
 		self.navInimiga.draw(self.screen)
+		
+		if self.posTiroY < 480 and self.posTiroY > 0:			
+			self.padraoTiro.x = self.sprite.x + 14
+			self.padraoTiro.y = self.posTiroY + 40
+			self.padraoTiro.drawFragment(self.screen, Rect(random.random() * 630, self.posTiroY, 4, 480-self.posTiroY))
+			self.posTiroY -= 10
+			
+		
+		if self.posTiroY <= self.limTiroY:
+			self.posTiroY = 480
+		
 		pygame.display.flip()
 				
 					
