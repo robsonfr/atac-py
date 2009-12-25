@@ -44,7 +44,7 @@ class ourgame:
 		pygame.init();		
 		self.screenSize = (640,480)
 		self.situacao = [0,0,0,0,0,0]
-		self.screen = pygame.display.set_mode(self.screenSize, FULLSCREEN | HWSURFACE)
+		self.screen = pygame.display.set_mode(self.screenSize, HWSURFACE)
 		pygame.mouse.set_visible(False)
 	   
 	   
