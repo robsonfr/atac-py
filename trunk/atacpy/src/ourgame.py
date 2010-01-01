@@ -1,29 +1,6 @@
-import pygame, sys, os, math, random;
+import pygame, sys, os, math, random, numpy, engine;
 from pygame.locals import *;
-
-class gameobject:
-	
-	def __init__(self, source, srcCorner = (0,0), size = (32,32)):
-		self.srcCorner = srcCorner
-		self.size = size
-		self.x = 0
-		self.y = 0
-		self.stepx, self.stepy = 3,0
-		self.surface = source
-		
-	def moveTo(self, newX, newY):
-		self.x, self.y = newX, newY
-		
-	def draw(self, target):
-		target.blit(self.surface, (self.x, self.y))
-
-	def drawFragment(self, target, area):
-		target.blit(self.surface, (self.x, self.y), area)
-
-class bitmapscreen:
-	
-	def __init__(self, imageFile, xyCoord = (0,0), effect = 0): 
-		pass
+from engine.graphics import bitmapscreen, sprite;
 	
 class dataloader:
 	
@@ -31,7 +8,7 @@ class dataloader:
 		ext = filename[-3:].lower()
 		
 		if ext in ("png", "gif", "jpg", "jpeg"):
-			return pygame.image.load(os.path.join("data","images",filename))
+			return pygame.image.load(os.path.join("data", "images", filename))
 		elif ext in ("wav", "ogg", "mp3"):
 			return;
 		else:
@@ -42,25 +19,25 @@ class ourgame:
 	
 	def __init__(self):
 		pygame.init();		
-		self.screenSize = (640,480)
-		self.situacao = [0,0,0,0,0,0]
+		self.screenSize = (640, 480)
+		self.situacao = [0, 0, 0, 0, 0, 0]
 		self.screen = pygame.display.set_mode(self.screenSize, HWSURFACE)
 		pygame.mouse.set_visible(False)
 	   
 	   
 	def loadBitmaps(self):
 		self.background = pygame.Surface(self.screenSize)
-		self.sprite = gameobject(dataloader().load("new_nave.png"))
-		self.padraoTiro = gameobject(dataloader().load("random.png"))
-		self.navInimiga = gameobject(dataloader().load("new_nave_inimig.png"))
+		self.sprite = sprite(dataloader().load("new_nave.png"))
+		self.padraoTiro = sprite(dataloader().load("random.png"))
+		self.navInimiga = sprite(dataloader().load("new_nave_inimig.png"))
 		self.posTiroX = 0
-		self.posTiroY= 480
-		self.limTiroY= 0
+		self.posTiroY = 480
+		self.limTiroY = 0
 		self.navInimiga.baseX = random.random() * 428 + 20 
-		self.sprite.moveTo(100,440)
-		self.navInimiga.moveTo(200,0)
+		self.sprite.moveTo(100, 440)
+		self.navInimiga.moveTo(200, 0)
 		#self.background.fill((66,99,255))
-		self.background.fill((0,0,0))
+		self.background.fill((0, 0, 0))
 	
 	def introScreen():
 		pass
@@ -102,9 +79,9 @@ class ourgame:
 			
 	def updateScreen(self):
 		
-		if self.situacao[0] == 1 and self.sprite.x >= 20+self.sprite.stepx:
+		if self.situacao[0] == 1 and self.sprite.x >= 20 + self.sprite.stepx:
 			self.sprite.x -= self.sprite.stepx	
-		elif self.situacao[1] == 1 and self.sprite.x <= 448-self.sprite.stepx:
+		elif self.situacao[1] == 1 and self.sprite.x <= 448 - self.sprite.stepx:
 			self.sprite.x += self.sprite.stepx	
 			
 		if self.situacao[2] == 1 and self.posTiroY == 480:
@@ -134,15 +111,15 @@ class ourgame:
 			 if self.navInimiga.baseX > 448:
 			 	self.navInimiga.baseX = 448 
 		xx = self.navInimiga.baseX + math.cos(math.radians(yy * 6)) * 70
-		self.navInimiga.moveTo(xx,yy)	
-		self.screen.blit(self.background, (0,0))
+		self.navInimiga.moveTo(xx, yy)	
+		self.screen.blit(self.background, (0, 0))
 		self.sprite.draw(self.screen)
 		self.navInimiga.draw(self.screen)
 		
 		if self.posTiroY < 480 and self.posTiroY > 0:			
 			self.padraoTiro.x = self.sprite.x + 14
 			self.padraoTiro.y = self.posTiroY + 40
-			self.padraoTiro.drawFragment(self.screen, Rect(random.random() * 630, self.posTiroY, 4, 480-self.posTiroY))
+			self.padraoTiro.drawFragment(self.screen, Rect(random.random() * 630, self.posTiroY, 4, 480 - self.posTiroY))
 			self.posTiroY -= 10
 			
 		
@@ -159,6 +136,9 @@ class ourgame:
 			self.updateScreen()
 			pygame.time.wait(20)
 	
-jogo = ourgame()
-jogo.loadBitmaps()
-jogo.gameloop()	
+
+if __name__ == "__main__":
+	print engine.__doc__
+	jogo = ourgame()
+	jogo.loadBitmaps()
+	jogo.gameloop()	
