@@ -10,18 +10,44 @@ class dataloader:
 		if ext in ("png", "gif", "jpg", "jpeg"):
 			return pygame.image.load(os.path.join("data", "images", filename))
 		elif ext in ("wav", "ogg", "mp3"):
-			return;
+			return pygame.mixer.Sound(os.path.join("data", "sound", filename))
 		else:
 			return;		
 
+class star:
+	
+	modificadores = [0.25, 0.25, 0.05, 0.20, 0, 0.10, 0.05, 0.05, 0.05]
+	
+	def __reset(self):
+		self.x = random.randint(0,self.max_x - 1)
+		self.y = random.randint(0,self.max_y - 1)
+		self.color = Color(random.randint(0,255) * 16843008)
+	
+	def __init__(self, (max_x, max_y)):
+		self.max_x = max_x;
+		self.max_y = max_y
+		self.__reset()
+		self.speed = random.randint(2,5)
+
+	def draw(self, target):			  
+		target.set_at((self.x, self.y), self.color)
+
+		if self.y + self.speed >= target.get_height():
+			self.color = Color(random.randint(0,255) * 16843008)
+			self.x =  random.randint(0,self.max_x - 1)
+		self.y = (self.y + self.speed) % target.get_height() 
 
 class ourgame:
 	
 	def __init__(self):
-		pygame.init();		
+		pygame.init()
+		pygame.mixer.init()		
 		self.screenSize = (640, 480)
 		self.situacao = [0, 0, 0, 0, 0, 0]
 		self.screen = pygame.display.set_mode(self.screenSize, HWSURFACE)
+		self.fundo = dataloader().load("fundo2.png")
+		self.num_estrelas = 1000
+		self.som_tiro = dataloader().load("ourgame_fx1.ogg")
 		pygame.mouse.set_visible(False)
 	   
 	   
@@ -38,6 +64,9 @@ class ourgame:
 		self.navInimiga.moveTo(200, 0)
 		#self.background.fill((66,99,255))
 		self.background.fill((0, 0, 0))
+		self.stars = []
+		for i in range(0,self.num_estrelas):
+			self.stars.append(star(self.screenSize))
 	
 	def introScreen():
 		pass
@@ -86,6 +115,7 @@ class ourgame:
 			
 		if self.situacao[2] == 1 and self.posTiroY == 480:
 			self.posTiroY -= 20
+			self.som_tiro.play(loops=-1)
 			self.posTiroX = self.sprite.x + 14
 			self.padraoTiro.x = self.sprite.x + 14
 			self.limTiroY = self.navInimiga.y - 16
@@ -113,6 +143,9 @@ class ourgame:
 		xx = self.navInimiga.baseX + math.cos(math.radians(yy * 6)) * 70
 		self.navInimiga.moveTo(xx, yy)	
 		self.screen.blit(self.background, (0, 0))
+		self.screen.blit(self.fundo, (0,0))
+		for st in self.stars: st.draw(self.screen)
+		
 		self.sprite.draw(self.screen)
 		self.navInimiga.draw(self.screen)
 		
@@ -125,6 +158,7 @@ class ourgame:
 		
 		if self.posTiroY <= self.limTiroY:
 			self.posTiroY = 480
+			self.som_tiro.stop()
 		
 		pygame.display.flip()
 				
@@ -138,7 +172,6 @@ class ourgame:
 	
 
 if __name__ == "__main__":
-	print engine.__doc__
 	jogo = ourgame()
 	jogo.loadBitmaps()
 	jogo.gameloop()	
