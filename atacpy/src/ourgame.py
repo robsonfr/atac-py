@@ -153,7 +153,7 @@ class ourgame:
 			self.padraoTiro.x = self.sprite.x + 14
 			self.padraoTiro.y = self.posTiroY + 40
 			self.padraoTiro.drawFragment(self.screen, Rect(random.random() * 630, self.posTiroY, 4, 480 - self.posTiroY))
-			self.posTiroY -= 10
+			self.posTiroY -= 40
 			
 		
 		if self.posTiroY <= self.limTiroY:
