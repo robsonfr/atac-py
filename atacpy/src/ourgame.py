@@ -1,6 +1,6 @@
 import pygame, sys, os, math, random, numpy, engine;
 from pygame.locals import *;
-from engine.graphics import bitmapscreen, sprite;
+from engine.graphics import BitmapLayer, Sprite;
 	
 class dataloader:
 	
@@ -16,7 +16,7 @@ class dataloader:
 
 class star:
 	
-	modificadores = [0.25, 0.25, 0.05, 0.20, 0, 0.10, 0.05, 0.05, 0.05]
+#	modificadores = [0.25, 0.25, 0.05, 0.20, 0, 0.10, 0.05, 0.05, 0.05]
 	
 	def __reset(self):
 		self.x = random.randint(0,self.max_x - 1)
@@ -53,9 +53,9 @@ class ourgame:
 	   
 	def loadBitmaps(self):
 		self.background = pygame.Surface(self.screenSize)
-		self.sprite = sprite(dataloader().load("new_nave.png"))
-		self.padraoTiro = sprite(dataloader().load("random.png"))
-		self.navInimiga = sprite(dataloader().load("new_nave_inimig.png"))
+		self.sprite = Sprite(dataloader().load("new_nave.png"))
+		self.padraoTiro = Sprite(dataloader().load("random.png"))
+		self.navInimiga = Sprite(dataloader().load("new_nave_inimig.png"))
 		self.posTiroX = 0
 		self.posTiroY = 480
 		self.limTiroY = 0
@@ -153,7 +153,7 @@ class ourgame:
 			self.padraoTiro.x = self.sprite.x + 14
 			self.padraoTiro.y = self.posTiroY + 40
 			self.padraoTiro.drawFragment(self.screen, Rect(random.random() * 630, self.posTiroY, 4, 480 - self.posTiroY))
-			self.posTiroY -= 40
+			self.posTiroY -= 10
 			
 		
 		if self.posTiroY <= self.limTiroY:
