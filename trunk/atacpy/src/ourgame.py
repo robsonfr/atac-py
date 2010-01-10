@@ -42,11 +42,11 @@ class ourgame:
 	def __init__(self):
 		pygame.init()
 		pygame.mixer.init()		
-		self.screenSize = (640, 480)
+		self.screenSize = (640,480)
 		self.situacao = [0, 0, 0, 0, 0, 0]
 		self.screen = pygame.display.set_mode(self.screenSize, HWSURFACE)
 		self.fundo = dataloader().load("fundo2.png")
-		self.num_estrelas = 1000
+		self.num_estrelas = 200
 		self.som_tiro = dataloader().load("ourgame_fx1.ogg")
 		pygame.mouse.set_visible(False)
 	   
@@ -143,7 +143,7 @@ class ourgame:
 		xx = self.navInimiga.baseX + math.cos(math.radians(yy * 6)) * 70
 		self.navInimiga.moveTo(xx, yy)	
 		self.screen.blit(self.background, (0, 0))
-		self.screen.blit(self.fundo, (0,0))
+		#self.screen.blit(self.fundo, (0,0))
 		for st in self.stars: st.draw(self.screen)
 		
 		self.sprite.draw(self.screen)
@@ -168,7 +168,7 @@ class ourgame:
 			for e in pygame.event.get():
 				self.input(e)
 			self.updateScreen()
-			pygame.time.wait(20)
+	#		pygame.time.wait(20)
 	
 
 if __name__ == "__main__":
