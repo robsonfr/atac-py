@@ -9,7 +9,11 @@ class Layer:
     """Uma camada (layer) de "algo" grafico a ser desenhado
        Todos tem em comum um comportamento chamado draw
     """ 
-    def __init__(self):
+    def __init__(self, pos = (0,0), tam = (0,0)):
+        self.position = pos
+        self.size = tam
+
+    def draw(self, target):
         pass
 
 class Sprite:
@@ -31,7 +35,7 @@ class Sprite:
     def drawFragment(self, target, area):
         target.blit(self.surface, (self.x, self.y), area)
 
-class BitmapLayer:
+class BitmapLayer(Layer):
     
     def __init__(self, imageFile, xyCoord=(0, 0), effect=0): 
         pass
