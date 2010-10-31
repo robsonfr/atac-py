@@ -122,7 +122,7 @@ int draw_laser(int x, int y1, int y2, int dir,int sfx) {
 }
 
 void draw_explosion(int x, int y) {
-
+	
 
 }
 
