@@ -7,8 +7,11 @@
 #include <graphics.h>
 
 enum MENS_IDX {
-	MN_WAIT, MN_READY, MN_ETELG, MN_30ANOS, MN_CRED1, MN_CRED2, MN_CRED3, MN_CRED4, MN_TITLE,
-	MN_COPYR1, MN_COPYR2, MN_COPYR3, MN_PRES 
+	MN_WAIT, MN_READY, MN_ETELG, MN_30ANOS, MN_CRED1, 
+	MN_CRED2, MN_CRED3, MN_CRED4, MN_TITLE,
+	MN_COPYR1, MN_COPYR2, MN_COPYR3, MN_PRES,
+	MN_PERSTIT, MN_SUANV, MN_OINIMG, MN_POWER,
+	MN_VIDAEX, MN_BONUS, MN_PRESQT,
 };
 
 char *mensagens[] = {
@@ -24,7 +27,21 @@ char *mensagens[] = {
 	  "ATAC-C(C) Todos os direitos reservados.",
 	  "... a turna 2o. O da area de PD e",
 	  "a ETE LAURO GOMES pelos seus 30 anos",
-	  "Pressione uma tecla para seguir..."
+	  "Pressione uma tecla para seguir...",
+	  "Personagens e valores :",
+	  "Sua Nave",
+	  "O Inimigo: 100 pontos",
+	  "Power Up: 50 pontos + poder de fogo",
+	  "Vida Extra: Mais uma vida",
+	  "Bonus: 1000 pontos",
+	  "Pressione qualquer tecla...",
+	  "Selecione a velocidade",
+	  "1. Lento",
+	  "2. Medio",
+	  "3. Rapido",
+	  "Escolha a Dificuldade",
+	  "1. Facil",
+	  "2. Dificil"
 };
 
 char *arquivo_sprites = "ATAC-C.BMP";
