@@ -26,7 +26,9 @@ class Layer:
     def test_collision(self, layer):
         """Testa a colisao com outro Layer...
         """
-        return ((layer.x <= self.x <= layer.dx()) or (self.x <= layer.x <= self.dx())) and ((layer.y <= self.y <= layer.dy()) or (self.y <= layer.y <= self.dy())) 
+        cx = ((layer.x <= self.x <= layer.dx()) or (self.x <= layer.x <= self.dx()))
+        cy = ((layer.y <= self.y <= layer.dy()) or (self.y <= layer.y <= self.dy()))
+        return cx and cy 
         
         
 class Sprite(Layer):
@@ -34,11 +36,10 @@ class Sprite(Layer):
        nada impede que ele tambem seja um Layer ;)
     """
     def __init__(self, source, srcCorner=(0, 0), size=(32, 32)):
-        self.srcCorner = srcCorner
-        self.size = size
-        self.x, self.y = 0, 0
+        self.srcCorner = srcCorner      
         self.stepx, self.stepy = 3, 0
         self.surface = source
+        Layer.__init__(self, tam=size)
         
     def move_to(self, newX, newY):
         self.x, self.y = newX, newY
@@ -48,7 +49,15 @@ class Sprite(Layer):
 
     def draw_fragment(self, target, area):
         target.blit(self.surface, (self.x, self.y), area)
-        
+
+
+class AnimatedSprite(Sprite):
+    """Um sprite animado eh um sprite que segue uma regra de animacao
+    """
+    def __init__(self, source, srcCorner=(0,0), size=(32,32), num_of_frames=1, hor_step=0, ver_step=0): 
+        pass
+    
+    
 class Bitmap(Layer):
     
     def __init__(self, imageFile, xyCoord=(0, 0), effect=0): 
