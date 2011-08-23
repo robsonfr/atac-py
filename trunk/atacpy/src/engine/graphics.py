@@ -5,6 +5,8 @@ Created on 31/12/2009
 @author: Robson
 '''
 
+from pygame.locals import Rect
+
 class Layer:
     """Uma camada (layer) de "algo" grafico a ser desenhado
        Todos tem em comum um comportamento chamado draw
@@ -54,8 +56,33 @@ class Sprite(Layer):
 class AnimatedSprite(Sprite):
     """Um sprite animado eh um sprite que segue uma regra de animacao
     """
-    def __init__(self, source, srcCorner=(0,0), size=(32,32), num_of_frames=1, hor_step=0, ver_step=0): 
-        pass
+    def __init__(self, source, srcCorner=(0,0), size=(32,32), num_of_frames=1, frames_per_second = 60, hor_step=32, ver_step=0): 
+        Sprite.__init__(self, srcCorner, size)
+        self.h_s = hor_step
+        self.v_s = ver_step
+        self.fps = 1000.0 / frames_per_second
+        self.frames = num_of_frames
+        self.curr_frame = 0
+        
+    def get_curr_frame(self):
+        s, self.curr_frame = self.curr_frame, self.curr_frame + 1
+        if self.curr_frame == self.frames: self.curr_frame = 0
+        return s 
+    
+    def _calc_area(self):
+        f = self.get_curr_frame()
+        s = self.srcCorner
+        h = self.h_s
+        v = self.v_s
+        if self.hor_step <> 0:
+            return Rect(s[0] + h * f, s[1], self.size[0], self.size[1])
+        else:    
+            return Rect(s[0], s[1] + v * f, self.size[0], self.size[1])
+            
+        
+    def draw(self, target):
+        Sprite.draw_fragment(self, target, self._calc_area())
+        
     
     
 class Bitmap(Layer):

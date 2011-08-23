@@ -9,7 +9,6 @@ import py2exe
 import os
 
 def arquivos(base):
-    r = []
     for i,_,k in os.walk("data/" + base):
         if i.find(".svn") == -1 and len(k) > 0:
             for f in k:
