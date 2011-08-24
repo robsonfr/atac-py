@@ -7,7 +7,7 @@ Created on 31/12/2009
 
 from pygame.locals import Rect
 
-class Layer:
+class Layer(object):
     """Uma camada (layer) de "algo" grafico a ser desenhado
        Todos tem em comum um comportamento chamado draw
        e outro chamado test_collision
@@ -39,7 +39,7 @@ class Sprite(Layer):
     """
     def __init__(self, source, srcCorner=(0, 0), size=(32, 32)):
         self.srcCorner = srcCorner      
-        self.stepx, self.stepy = 3, 0
+        self.step_x, self.step_y = 3, 0
         self.surface = source
         Layer.__init__(self, tam=size)
         

@@ -43,10 +43,10 @@ class Ourgame(Game):
             
     def updateScreen(self):
         
-        if Game.situacao[0] == 1 and self.sprite.x >= 20 + self.sprite.stepx:
-            self.sprite.x -= self.sprite.stepx    
-        elif Game.situacao[1] == 1 and self.sprite.x <= 448 - self.sprite.stepx:
-            self.sprite.x += self.sprite.stepx    
+        if Game.situacao[0] == 1 and self.sprite.x >= 20 + self.sprite.step_x:
+            self.sprite.x -= self.sprite.step_x    
+        elif Game.situacao[1] == 1 and self.sprite.x <= 448 - self.sprite.step_x:
+            self.sprite.x += self.sprite.step_x    
             
         if Game.situacao[2] == 1 and self.posTiroY == 480:
             self.posTiroY -= 20

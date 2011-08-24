@@ -16,21 +16,15 @@ def data_load(filename):
     else:
         return;
 
-class Fim:
+class Fim(object):
     
     def perform(self):
         pass
         
     def next_state(self):
-        return None
-
-class GameElement(Layer):
-    def __init__(self, sprite=None, pos=(0,0), tam=(0,0)):
-        Layer.__init__(self, pos, tam)
-        self.sprite = sprite
-        
+        return None        
     
-class Game:
+class Game(object):
     """Classe generica para jogos
     """
     situacao = [0, 0, 0, 0, 0, 0]
@@ -43,6 +37,7 @@ class Game:
         pygame.mouse.set_visible(False)
         self.screen = pygame.display.set_mode(self.screenSize)
             
+                       
     def fsm_loop(self, estado_inicial = None):
         if estado_inicial is None: estado_inicial = self.estados[0]
         prox = estado_inicial
