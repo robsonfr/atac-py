@@ -1,7 +1,8 @@
 import random
 from pygame.locals import Color, Rect
 from engine.graphics import Layer, Sprite
-from engine import data_load
+from engine import data_load, Player, Estado, Game
+import math
 
 class Star(Layer):
     
@@ -34,11 +35,29 @@ class Tiro(Layer):
         self.padrao_tiro = Sprite(data_load("random.png"))
         self.x, self.y = pos
         self.lim_y = lim_y
-    
-    def draw(self, target):    
+        self.som_tiro = data_load("ourgame_fx1.ogg")
+        self.disparando = False
+       
+    def draw(self, target, x):        
+        self.padrao_tiro.x = x
+        self.padrao_tiro.y = self.y + 40
         self.padrao_tiro.draw_fragment(target, Rect(random.random() * 630, self.y, 4, 480 - self.y))
+        self.y -= 60
+        if self.y <= self.lim_y:
+            self.y = 480
+            self.disparando = False
+            self.som_tiro.stop()
 
-class Nave(Layer):
+    def shoot(self, x, l_y=20):
+        self.disparando = True
+        self.y = 460
+        self.x = x
+        self.padrao_tiro.x = x
+        self.lim_y = l_y
+        self.som_tiro.play(loops=-1)
+        
+
+class Nave(Player):
     
     def __init__(self):        
         self.sprite = Sprite(data_load("new_nave.png"))
@@ -46,13 +65,43 @@ class Nave(Layer):
         Layer.__init__(self, (self.sprite.x, self.sprite.y), self.sprite.size)
         self.tiro = Tiro()
 
-    def move_to(self, x, y):
-        self.sprite.move_to(x,y)
-        return self
-    
+    def shoot(self):
+        if not self.tiro.disparando:
+            self.tiro.shoot(x=self.sprite.x + 14, l_y=20)
+            
     def draw(self, target):
-        self.sprite.draw(target)
+        Player.draw(self, target)
+        if self.tiro.disparando: self.tiro.draw(target, self.sprite.x + 14)
+
+
+class GamePlay(Estado):                
+    
+    def __init__(self, game_object):
+        self.go = game_object
+    
+    def perform(self):
+    
+        if Game.situacao[0] == 1:
+            self.go.nave.move_x(-1)        
+        elif Game.situacao[1] == 1:
+            self.go.nave.move_x(1)
         
-    def move_x(self, dx=1):
-        if dx < 0 and self.sprite.x >= 20 + self.sprite.step_x: self.sprite.x -= self.sprite.step_x
-        elif dx > 0 and self.sprite.x <= 448 - self.sprite.step_x: self.sprite.x += self.sprite.step_x 
+        if Game.situacao[2] == 1 and self.go.nave.tiro.y == 480:
+            self.go.nave.shoot()
+                    
+        yy = self.go.navInimiga.y + 1
+        if yy == 480:
+            yy = 0
+            self.go.navInimiga.baseX += random.random() * 200 - 100
+            if self.go.navInimiga.baseX < 0:
+                self.go.navInimiga.baseX = 0
+            elif self.go.navInimiga.baseX > 448:
+                self.go.navInimiga.baseX = 448 
+        xx = self.go.navInimiga.baseX + math.cos(math.radians(yy * 6)) * 70
+        self.go.navInimiga.move_to(xx, yy)    
+        self.go.screen.blit(self.go.background, (0, 0))
+        self.go.screen.blit(self.go.fundo, (0,0))
+        for st in self.go.stars: st.draw(self.go.screen)
+        
+        self.go.nave.draw(self.go.screen)
+        self.go.navInimiga.draw(self.go.screen)                
