@@ -4,7 +4,7 @@ Um 'engine' basico
 from pygame import image, mixer
 from pygame.locals import KEYDOWN, KEYUP, QUIT
 from engine.graphics import Layer, Sprite
-import os, sys, pygame
+import os, sys, pygame, yaml
 
 def data_load(filename):
     ext = filename[-3:].lower()
@@ -16,10 +16,17 @@ def data_load(filename):
     else:
         return;
 
+class Config(object):
+
+    def config_load(self, filename):
+        pass
+    
+    
+
 class Estado(object):
     
-    def __init__(self, game_object=None):
-        pass
+    def __init__(self, game_object):
+        self.go = game_object
     
     def __iter__(self):
         return self
@@ -57,8 +64,9 @@ class Game(object):
     """Classe generica para jogos
     """
     situacao = [0, 0, 0, 0, 0, 0]
-    def __init__(self):
-        self.estados = [Fim()]
+    def __init__(self, e_inicial = ""):
+        self.estados = {}
+        self.estado_inicial = e_inicial
 
         pygame.init()
         pygame.mixer.init()        
@@ -67,9 +75,9 @@ class Game(object):
         self.screen = pygame.display.set_mode(self.screenSize)
             
                        
-    def fsm_loop(self, estado_inicial = None):
-        if estado_inicial is None: estado_inicial = self.estados[0]
-        prox = estado_inicial
+    def fsm_loop(self):
+        e = self.estados[self.estado_inicial]
+        prox = e
         for p in prox:
             yield p
 

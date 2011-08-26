@@ -42,7 +42,7 @@ class Tiro(Layer):
         self.padrao_tiro.x = x
         self.padrao_tiro.y = self.y + 40
         self.padrao_tiro.draw_fragment(target, Rect(random.random() * 630, self.y, 4, 480 - self.y))
-        self.y -= 60
+        self.y -= 20
         if self.y <= self.lim_y:
             self.y = 480
             self.disparando = False
@@ -73,12 +73,26 @@ class Nave(Player):
         Player.draw(self, target)
         if self.tiro.disparando: self.tiro.draw(target, self.sprite.x + 14)
 
-
-class GamePlay(Estado):                
+class Intro(Estado):
     
     def __init__(self, game_object):
-        self.go = game_object
+        Estado.__init__(self, game_object)
+        self.etelg = Sprite(data_load("ETELG.png"))
+        self._30anos = Sprite(data_load("30anos.png"))
+        self._47anos = Sprite(data_load("47anos.png"))
+        self.speed = 30
+        self.counter = self.speed
+        self.index = 0
+        self.indices = {  }
     
+    def perform(self): 
+        pass
+    
+    def next(self):
+        return self.go.estados['gameplay']
+
+class GamePlay(Estado):                
+        
     def perform(self):
     
         if Game.situacao[0] == 1:
