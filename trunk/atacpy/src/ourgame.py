@@ -1,13 +1,13 @@
 import pygame, sys, random
 from engine.graphics import Sprite
 from engine import data_load, Game        
-from atacpy import Star, Nave, GamePlay
+from atacpy import Star, Nave, Intro, GamePlay
 
 class Ourgame(Game):
     
     def __init__(self):
-        Game.__init__(self)
-        self.estados = [GamePlay(self)]
+        Game.__init__(self,'intro')
+        self.estados = {'intro' : Intro(self), 'gameplay' : GamePlay(self)}
         self.fundo = data_load("fundo2.png")
         self.num_estrelas = 40
         self.som_tiro = data_load("ourgame_fx1.ogg")
