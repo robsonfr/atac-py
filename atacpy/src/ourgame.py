@@ -17,13 +17,13 @@ class Ourgame(Game):
         sys.exit()
 
     def load_bitmaps(self):
-        self.background = pygame.Surface(self.screenSize)
+        self.background = pygame.Surface(self.screen_size)
         self.nave = Nave()
         self.navInimiga = Sprite(data_load("new_nave_inimig.png"))
         self.navInimiga.baseX = random.random() * 428 + 20 
         self.navInimiga.move_to(200, 0)
         self.background.fill((0, 0, 0))
-        self.stars = [Star(self.screenSize) for _ in xrange(self.num_estrelas)]
+        self.stars = [Star(self.screen_size) for _ in xrange(self.num_estrelas)]
                             
 
 if __name__ == "__main__":
