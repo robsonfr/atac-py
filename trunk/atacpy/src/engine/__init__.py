@@ -1,9 +1,10 @@
 """Pacote com modulos e classes para a construcao de jogos
 Um 'engine' basico
 """
-from pygame import image, mixer
-from pygame.locals import KEYDOWN, KEYUP, QUIT
+from pygame import image, mixer, surface
+from pygame.locals import KEYDOWN, KEYUP, QUIT, Rect
 from engine.graphics import Layer, Sprite
+from pygame.transform import smoothscale
 import os, sys, pygame, yaml
 
 def data_load(filename):
@@ -18,10 +19,11 @@ def data_load(filename):
 
 class Config(object):
 
-    def config_load(self, filename):
+    def load(self, filename):
         pass
-    
-    
+        
+    def save(self, filename):
+        pass
 
 class Estado(object):
     
@@ -44,13 +46,13 @@ class Fim(Estado):
     
 class Player(Layer):
     
-    def __init__(self, sprite_file, ini_pos=(0,0)):
+    def __init__(self, sprite_file, ini_pos=(0, 0)):
         self.sprite = Sprite(data_load(sprite_file))
         self.sprite.move_to(ini_pos[0], ini_pos[1])
         Layer.__init__(self, (self.sprite.x, self.sprite.y), self.sprite.size)
     
     def move_to(self, x, y):
-        self.sprite.move_to(x,y)
+        self.sprite.move_to(x, y)
         return self
     
     def draw(self, target):
@@ -64,16 +66,33 @@ class Game(object):
     """Classe generica para jogos
     """
     situacao = [0, 0, 0, 0, 0, 0]
-    def __init__(self, e_inicial = ""):
+
+    
+    def _fullscreen(self):
+        if self.fullscreen:            
+            self.f_screen = pygame.display.set_mode(self.fullscreen_size, pygame.locals.FULLSCREEN, 32)
+            fator = self.f_screen.get_height() / 480.0
+            
+            self.f_size = (int(640 * fator), int(480 * fator))
+            self.scaled = surface.Surface(self.f_size, 32)
+            self.px = 840 - self.f_size[0] / 2
+        else:
+            self.f_screen = pygame.display.set_mode(self.screen_size, 0)
+ 
+    
+    def __init__(self, e_inicial=""):
         self.estados = {}
         self.estado_inicial = e_inicial
 
         pygame.init()
         pygame.mixer.init()        
-        self.screenSize = (640, 480)
+        self.screen_size = (640, 480)
+        self.fullscreen_size = (1680, 1050)
         pygame.mouse.set_visible(False)
-        self.screen = pygame.display.set_mode(self.screenSize)
-            
+        self.screen = surface.Surface(self.screen_size,32)
+#        modes = pygame.display.list_modes(32)
+        self.fullscreen = True
+        self._fullscreen()
                        
     def fsm_loop(self):
         e = self.estados[self.estado_inicial]
@@ -99,7 +118,12 @@ class Game(object):
             if event.key == 115: #S
                 Game.situacao[3] = 1
             if event.key == 32:
-                print pygame.display.toggle_fullscreen()
+                self.fullscreen = not self.fullscreen
+                if self.fullscreen:
+                    pass
+                else:
+                    pass
+                
             #print event.key
         if event.type == KEYUP:
             if event.key == 27: # ESCAPE
@@ -120,6 +144,11 @@ class Game(object):
                 self.input(e)
             if Game.situacao[5] == -1: self.end_game()
             estado.perform()
+            if self.fullscreen:
+                smoothscale(self.screen, self.f_size, self.scaled)
+                self.f_screen.blit(self.scaled, (self.px,0))
+            else:
+                self.f_screen.blit(self.screen, (0,0))
             pygame.display.flip()
             pygame.time.wait(20)
         
