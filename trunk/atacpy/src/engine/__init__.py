@@ -5,6 +5,7 @@ from pygame import image, mixer, surface
 from pygame.locals import KEYDOWN, KEYUP, QUIT, Rect
 from engine.graphics import Layer, Sprite
 from pygame.transform import smoothscale
+from __future__ import with_statement
 import os, sys, pygame, yaml
 
 def data_load(filename):
@@ -14,6 +15,9 @@ def data_load(filename):
         return image.load(os.path.join("data", "images", filename))
     elif ext in ("wav", "ogg", "mp3"):
         return mixer.Sound(os.path.join("data", "sound", filename))
+    elif ext in ("yml"):
+        with open(os.path.join("data", "scripts", filename),"rt") as arq:        
+            return yaml.load(arq.read())
     else:
         return;
 

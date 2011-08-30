@@ -1,0 +1,31 @@
+intro:
+    - loop:
+        description: "Drawing the old logo"
+        values: [20, 600]
+        actions:
+            - draw: ["naveOld", "i"]
+            - shoot: "naveOld"
+            - var:
+                "j" : "i"
+            - add: ["j", -20]
+            - drawFragment: ["etelg", 0, 0, "j", 30]
+    - loop:
+        description: "Erasing the logo"
+        values: [600, 20]
+        actions:
+            - draw: ["naveOld", "i"]
+            - shoot: "naveOld"
+            - var:
+                "j" : "i"
+            - add: ["j", "-20"]
+            - drawFragment: ["etelg", 0, 0, "j", 30]
+    - loop:
+        description: "Drawing the new logo"
+        values: [20, 600]
+        actions:
+            - draw: ["nave", "i"]
+            - shoot: "nave"
+            - var:
+                "j" : "i"
+            - add: ["j", -20]
+            - drawFragment: ["etelg", 0, 30, "j", 30]
