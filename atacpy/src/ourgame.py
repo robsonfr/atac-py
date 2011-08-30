@@ -10,7 +10,7 @@ class Ourgame(Game):
         self.estados = {'intro' : Intro(self), 'gameplay' : GamePlay(self)}
         self.fundo = data_load("fundo2.png")
         self.num_estrelas = 40
-        self.som_tiro = data_load("ourgame_fx1.ogg")
+        self.scripts = data_load("atacc.yml")
 
 
     def end_game(self):
@@ -20,6 +20,7 @@ class Ourgame(Game):
         self.background = pygame.Surface(self.screen_size)
         self.nave = Nave()
         self.navInimiga = Sprite(data_load("new_nave_inimig.png"))
+        self.etelg = Sprite(data_load("ETELG.png"))
         self.navInimiga.baseX = random.random() * 428 + 20 
         self.navInimiga.move_to(200, 0)
         self.background.fill((0, 0, 0))
