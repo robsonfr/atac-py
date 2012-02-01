@@ -90,3 +90,8 @@ class Bitmap(Layer):
     def __init__(self, imageFile, xyCoord=(0, 0), effect=0): 
         pass
 
+
+class Font(Sprite):
+
+    def __init__(self,source,):
+        pass
