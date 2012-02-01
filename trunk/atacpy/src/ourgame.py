@@ -1,7 +1,7 @@
 import pygame, sys, random
 from engine.graphics import Sprite
 from engine import data_load, Game        
-from atacpy import Star, Nave, Intro, GamePlay
+from atacpy.game import Star, Nave, Intro, GamePlay
 
 class Ourgame(Game):
     

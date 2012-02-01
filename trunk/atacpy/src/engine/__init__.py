@@ -1,12 +1,13 @@
 """Pacote com modulos e classes para a construcao de jogos
 Um 'engine' basico
 """
+from __future__ import with_statement
 from pygame import image, mixer, surface
 from pygame.locals import KEYDOWN, KEYUP, QUIT, Rect
 from engine.graphics import Layer, Sprite
 from pygame.transform import smoothscale
-from __future__ import with_statement
 import os, sys, pygame, yaml
+import pygame.key
 
 def data_load(filename):
     ext = filename[-3:].lower()
@@ -69,19 +70,19 @@ class Player(Layer):
 class Game(object):
     """Classe generica para jogos
     """
-    situacao = [0, 0, 0, 0, 0, 0]
+    situacao = [0, 0, 0, 0, 0, 0, 0]
 
     
     def _fullscreen(self):
         if self.fullscreen:            
-            self.f_screen = pygame.display.set_mode(self.fullscreen_size, pygame.locals.FULLSCREEN, 32)
+            self.f_screen = pygame.display.set_mode(self.fullscreen_size, pygame.locals.FULLSCREEN)
             fator = self.f_screen.get_height() / 480.0
             
             self.f_size = (int(640 * fator), int(480 * fator))
             self.scaled = surface.Surface(self.f_size, 32)
             self.px = 840 - self.f_size[0] / 2
         else:
-            self.f_screen = pygame.display.set_mode(self.screen_size, 0)
+            self.f_screen = pygame.display.set_mode(self.screen_size)
  
     
     def __init__(self, e_inicial=""):
@@ -121,12 +122,8 @@ class Game(object):
                 Game.situacao[2] = 1
             if event.key == 115: #S
                 Game.situacao[3] = 1
-            if event.key == 32:
-                self.fullscreen = not self.fullscreen
-                if self.fullscreen:
-                    pass
-                else:
-                    pass
+            if event.key == 308: #alt
+                Game.situacao[6] = 1
                 
             #print event.key
         if event.type == KEYUP:
@@ -140,6 +137,11 @@ class Game(object):
                 Game.situacao[2] = 0
             if event.key == 115: #S
                 Game.situacao[3] = 0
+            if event.key == 308: #alt
+                Game.situacao[6] = 0
+            if event.key == pygame.K_RETURN and Game.situacao[6] == 1:                
+                self.fullscreen = not self.fullscreen
+                self._fullscreen()
                 
     def game_loop(self):
         maquina_estados = self.fsm_loop()
