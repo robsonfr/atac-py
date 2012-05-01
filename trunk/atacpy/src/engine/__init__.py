@@ -37,12 +37,12 @@ class Estado(object):
     
     def __iter__(self):
         return self
-    
-    def perform(self):
-        pass
-    
+        
     def next(self):
         return self
+
+    def __call__(self):
+        pass
 
 class Fim(Estado):
                 
@@ -92,7 +92,7 @@ class Game(object):
         pygame.init()
         pygame.mixer.init()        
         self.screen_size = (640, 480)
-        self.fullscreen_size = (1680, 1050)
+        self.fullscreen_size = (1366, 768)
         pygame.mouse.set_visible(False)
         self.screen = surface.Surface(self.screen_size,32)
 #        modes = pygame.display.list_modes(32)
@@ -149,7 +149,7 @@ class Game(object):
             for e in pygame.event.get():
                 self.input(e)
             if Game.situacao[5] == -1: self.end_game()
-            estado.perform()
+            estado()
             if self.fullscreen:
                 smoothscale(self.screen, self.f_size, self.scaled)
                 self.f_screen.blit(self.scaled, (self.px,0))

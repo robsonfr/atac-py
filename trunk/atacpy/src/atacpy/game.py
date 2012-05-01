@@ -89,16 +89,13 @@ class Intro(Estado):
         self.counter = self.speed
         self.index = 0
         self.indices = {  }
-    
-    def perform(self): 
-        pass
-    
+        
     def next(self):
         return self.go.estados['gameplay']
 
 class GamePlay(Estado):                
         
-    def perform(self):
+    def __call__(self):
     
         if Game.situacao[0] == 1:
             self.go.nave.move_x(-1)        
