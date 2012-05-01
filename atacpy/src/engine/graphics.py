@@ -15,10 +15,12 @@ class Layer(object):
     def __init__(self, pos = (0,0), tam = (0,0)):
         self.x, self.y = pos
         self.size = tam
-        
+    
+    @property    
     def dx(self):
         return self.x + self.size[0]    
 
+    @property
     def dy(self):
         return self.y + self.size[1]
 
@@ -28,8 +30,8 @@ class Layer(object):
     def test_collision(self, layer):
         """Testa a colisao com outro Layer...
         """
-        cx = ((layer.x <= self.x <= layer.dx()) or (self.x <= layer.x <= self.dx()))
-        cy = ((layer.y <= self.y <= layer.dy()) or (self.y <= layer.y <= self.dy()))
+        cx = (layer.x <= self.x <= layer.dx) or (self.x <= layer.x <= self.dx)
+        cy = (layer.y <= self.y <= layer.dy) or (self.y <= layer.y <= self.dy)
         return cx and cy 
         
         
@@ -83,7 +85,7 @@ class AnimatedSprite(Sprite):
     def draw(self, target):
         Sprite.draw_fragment(self, target, self._calc_area())
         
-    
+    area = property(_calc_area)
     
 class Bitmap(Layer):
     
@@ -93,5 +95,5 @@ class Bitmap(Layer):
 
 class Font(Sprite):
 
-    def __init__(self,source,):
+    def __init__(self,source):
         pass
