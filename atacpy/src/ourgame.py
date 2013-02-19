@@ -6,7 +6,7 @@ from atacpy.game import Star, Nave, Intro, GamePlay
 class Ourgame(Game):
     
     def __init__(self):
-        Game.__init__(self,'intro')
+        Game.__init__(self,'intro',fullscr=False)
         self.estados = {'intro' : Intro(self), 'gameplay' : GamePlay(self)}
         self.fundo = data_load("fundo2.png")
         self.num_estrelas = 40

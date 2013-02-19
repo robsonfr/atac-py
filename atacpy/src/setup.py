@@ -5,8 +5,8 @@ Created on 21/08/2011
 @author: robson
 '''
 from distutils.core import setup
-import py2exe
-import os
+from cx_Freeze import setup, Executable
+import os, sys
 
 def arquivos(base):
     for i,_,k in os.walk("data/" + base):
@@ -16,6 +16,12 @@ def arquivos(base):
     
 di = arquivos("images")
 ds = arquivos("sound")
+
+opcoes = { 'packages' : ['os','pygame','random','sys']}
+
+base = None
+if sys.platform == "win32":
+    base = "Win32GUI"
 
 setup(windows=['ourgame.py'],
       name='ATAC-PY',
@@ -27,7 +33,6 @@ setup(windows=['ourgame.py'],
       packages=['atacpy', 'data', 'engine'],
       data_files=[('data/images', di),
                   ('data/sound', ds)],
-      options={'py2exe': {
-        "optimize": 2,
-        "bundle_files": 2, # This tells py2exe to bundle everything
-      }})
+      options={'build_exe': opcoes},
+      executables = [Executable("ourgame.py", base=base)]
+)
