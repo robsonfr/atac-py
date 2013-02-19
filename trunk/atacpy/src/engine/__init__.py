@@ -43,6 +43,9 @@ class Estado(object):
 
     def __call__(self):
         pass
+    
+    def load(self):
+        pass
 
 class Fim(Estado):
                 
@@ -85,7 +88,7 @@ class Game(object):
             self.f_screen = pygame.display.set_mode(self.screen_size)
  
     
-    def __init__(self, e_inicial=""):
+    def __init__(self, e_inicial="", fullscr = True):
         self.estados = {}
         self.estado_inicial = e_inicial
 
@@ -96,7 +99,7 @@ class Game(object):
         pygame.mouse.set_visible(False)
         self.screen = surface.Surface(self.screen_size,32)
 #        modes = pygame.display.list_modes(32)
-        self.fullscreen = True
+        self.fullscreen = fullscr
         self._fullscreen()
                        
     def fsm_loop(self):
